@@ -1,6 +1,6 @@
 
 # Known issues
-
+- edited for spark3
 - Problem running with Spark 2.4.1 on some platforms: `Pandas generates null values`. See this example
 
 ``` py
@@ -8,13 +8,13 @@ import numpy as np
 import pandas as pd
 spark.conf.set("spark.sql.execution.arrow.enabled", "true")
 
-from pyspark.sql.functions import pandas_udf, PandasUDFType
+from pyspark.sql.functions import pandas_udf
 
 df = spark.createDataFrame(
     [(1, 1.0), (1, 2.0), (2, 3.0), (2, 5.0), (2, 10.0)],
     ("id", "v"))
 
-@pandas_udf("id long, v double", PandasUDFType.GROUPED_MAP)
+@pandas_udf("id long, v double", groupby="id")
 def subtract_mean(pdf):
     # pdf is a pandas.DataFrame
     v = pdf.v
